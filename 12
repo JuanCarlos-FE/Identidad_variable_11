@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Textura Identidad</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background-color: #fff;
+      font-family: 'Roboto Flex', sans-serif;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      grid-auto-rows: 30px;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .word {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 100;
+      font-variation-settings: "wght" 100;
+      transition: font-variation-settings 0.1s linear;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid" id="grid"></div>
+
+  <script>
+    const grid = document.getElementById('grid');
+    const totalWords = 1000;
+
+    for (let i = 0; i < totalWords; i++) {
+      const span = document.createElement('div');
+      span.className = 'word';
+      span.textContent = 'identidad';
+      grid.appendChild(span);
+    }
+
+    document.addEventListener('mousemove', e => {
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+
+      document.querySelectorAll('.word').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        const dx = rect.left + rect.width / 2 - mouseX;
+        const dy = rect.top + rect.height / 2 - mouseY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        const maxDistance = 300;
+        const clamped = Math.max(0, Math.min(1, 1 - distance / maxDistance));
+        const weight = 100 + clamped * 900;
+
+        el.style.setProperty('font-variation-settings', `'wght' ${weight.toFixed(0)}`);
+      });
+    });
+  </script>
+</body>
+</html>
